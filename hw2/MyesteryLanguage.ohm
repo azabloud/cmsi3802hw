@@ -1,0 +1,53 @@
+MysteryLanguage {
+  Program = FunDecl* Exp
+  FunDecl = func id Params Body
+  
+  Params =  "(" ListOf<id, ","> ")"
+  Body =  Statement+ "end"
+  Statement = Exp ";"
+  
+  func = "func" ~idchar
+  if = "if" ~idchar
+  else = "else" ~idchar
+  
+  keyword = func | if | else
+  
+  Exp = FunCall | Conditional | Exp2
+  Exp2        =  Exp2 addop Exp3            -- binary
+              |  Exp3
+  Exp3        =  Exp3 mulop Exp4            -- binary
+              |  Exp4
+  Exp4        =  prefix Exp5                -- unary
+              |  Exp5
+  Exp5        =  Exp6 factorial             -- unary
+              |  Exp6
+  Exp6        =  "(" Exp ")"				-- parens
+  			      |	 numlit 
+              |  stringlit 
+              |  id 
+              
+  Conditional = Exp if Exp else Exp end
+              
+  addop       =  "+" | "-"
+  mulop       =  "*" | "/" | "%"
+  prefix      =  ~"-"
+  factorial	  =  "!"
+  
+  numlit      = floatlit | intlit
+  intlit      = digit+
+  floatlit    = digit+ "." digit+ (("E"|"e") ("+"|"-")? digit+)?
+  
+  escape      =  "\\\\" | "\\\"" | "\\'" | "\\n" | hexseq
+  hexseq      =  "\\u{" hexDigit hexDigit? hexDigit? hexDigit? hexDigit? hexDigit? "}"
+  stringlit   =  "\"" (char | "\'")* "\""
+  char        =  escape
+              |  ~"\\" ~"\"" ~"'" ~"\n" any
+  
+  idchar = letter | digit | "_" | "@" | "$"
+  id = ~keyword (letter | "@") idchar*
+  
+  FunCall = id "[" (Exp ("," Exp)*)? "]"
+  
+  space      +=  comment
+  comment     =  "--" (~"\n" any)*       	              -- singleLine
+}

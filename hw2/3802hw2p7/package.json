@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "brew": "^0.0.8",
+    "mocha": "^10.2.0",
+    "ohm-js": "^16.6.0"
+  },
+  "name": "pack",
+  "version": "1.0.0",
+  "main": "diff.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module"
+}
